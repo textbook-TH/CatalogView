@@ -174,7 +174,7 @@
                 <p class="text-sm text-slate-500 mt-1">ลองเปลี่ยนคำค้นหาหรือเลือกภาควิชาอื่น ๆ ด้านบน</p>
             </div>
 
-            <!-- Error State (Robust fallback when sheet fetch fails) -->
+            <!-- Error State -->
             <div id="errorState" class="hidden py-24 text-center">
                 <div class="w-16 h-16 bg-rose-500/10 text-rose-400 rounded-full flex items-center justify-center mx-auto mb-4 border border-rose-500/20">
                     <i class="fa-solid fa-circle-exclamation text-2xl"></i>
@@ -216,16 +216,26 @@
                 
                 <!-- Mobile-Only Button Block -->
                 <div class="w-full mt-5 pb-6 md:hidden flex flex-col gap-3">
-                    <a id="modalExternalLinkMobile" href="#" target="_blank" class="w-full py-4 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-xl text-center text-sm font-bold transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 border border-indigo-500/30">
+                    <a id="modalExternalLinkMobile" href="#" target="_blank" class="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-xl text-center text-sm font-bold transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 border border-indigo-500/30">
                         <i class="fa-solid fa-up-right-from-square text-base"></i> เปิดดูไฟล์เต็มผ่าน Google Drive
                     </a>
+
+                    <!-- Mobile Transfer Slip / Short Link Button -->
+                    <div id="modalShortLinkContainerMobile" class="w-full flex flex-col gap-2 hidden">
+                        <a id="modalShortLinkBtnMobile" href="#" target="_blank" class="w-full py-3.5 bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500 text-white rounded-xl text-center text-sm font-bold transition-all shadow-lg shadow-cyan-600/20 flex items-center justify-center gap-2 border border-cyan-500/30">
+                            <i class="fa-solid fa-receipt text-base"></i> แจ้งโอนสลิป
+                        </a>
+                        <button onclick="copyShortLinkToClipboard(true)" class="w-full py-2.5 bg-space-900 border border-cyan-500/30 hover:border-cyan-500/50 text-cyan-300 rounded-xl text-xs font-semibold flex items-center justify-center gap-2">
+                            <i class="fa-regular fa-copy"></i> คัดลอกลิงก์โอนสลิป
+                            <span id="copyShortToastMobile" class="hidden text-[10px] text-emerald-400 font-bold bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md animate-pulse">คัดลอกแล้ว!</span>
+                        </button>
+                    </div>
                     
                     <!-- Mobile-Only Large Interactive Click-to-Copy Book ID Badge -->
                     <div id="modalIdBadgeMobile" onclick="copyIdToClipboard(true)" class="group w-full py-3.5 bg-space-900/90 hover:bg-space-800/70 border border-indigo-500/30 hover:border-indigo-500/50 text-white rounded-xl text-center transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer" title="คลิกเพื่อคัดลอกรหัส">
                         <span class="text-indigo-400 font-black text-lg">#</span>
                         <span id="modalIdTextMobile" class="text-indigo-300 font-black tracking-widest font-mono text-base"></span>
                         <i class="fa-regular fa-copy text-xs text-indigo-400/70 group-hover:text-indigo-200 ml-1"></i>
-                        <!-- Toast Alert inside mobile button -->
                         <span id="copyToastMobile" class="hidden text-xs text-emerald-400 font-bold bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-lg ml-2 animate-pulse">
                             <i class="fa-solid fa-circle-check"></i> คัดลอกแล้ว!
                         </span>
@@ -233,7 +243,7 @@
                 </div>
             </div>
 
-            <!-- Clean Details and Action Panel (Desktop View - Hidden on Mobile) -->
+            <!-- Clean Details and Action Panel (Desktop View) -->
             <div class="hidden md:flex flex-1 p-6 sm:p-8 md:p-10 flex-col overflow-y-auto max-h-[55vh] md:max-h-full">
                 <div class="mb-5">
                     <!-- Premium Standout Click-to-Copy Book ID Badge (Desktop) -->
@@ -243,7 +253,6 @@
                             <span id="modalIdText"></span>
                             <i class="fa-regular fa-copy text-xs text-indigo-400/70 group-hover:text-indigo-200 ml-1"></i>
                         </span>
-                        <!-- Tiny Notification Toast Inside Modal Info Panel -->
                         <span id="copyToast" class="hidden text-xs text-emerald-400 font-bold bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-xl transition-all duration-200 animate-pulse">
                             <i class="fa-solid fa-circle-check mr-1"></i> คัดลอกแล้ว!
                         </span>
@@ -251,7 +260,7 @@
                     <h2 id="modalTitle" class="font-black text-white leading-tight line-clamp-2"></h2>
                 </div>
 
-                <div class="space-y-4 md:space-y-4 border-t border-b border-space-800/60 py-5 md:py-6 mb-5 text-sm md:text-base">
+                <div class="space-y-3.5 border-t border-b border-space-800/60 py-5 mb-5 text-sm md:text-base">
                     <div class="flex items-start">
                         <span class="w-24 md:w-32 text-slate-500 shrink-0 font-medium">ผู้ประพันธ์:</span>
                         <span id="modalAuthor" class="text-slate-200 font-semibold"></span>
@@ -282,10 +291,15 @@
                         </div>
                     </div>
 
-                    <div id="modalDiscountBadge" class="hidden text-center mb-5 py-2.5 px-4 rounded-xl bg-rose-500/10 border border-rose-500/25 text-rose-300 font-semibold text-sm shadow-inner animate-blink"></div>
+                    <div id="modalDiscountBadge" class="hidden text-center mb-4 py-2.5 px-4 rounded-xl bg-rose-500/10 border border-rose-500/25 text-rose-300 font-semibold text-sm shadow-inner animate-blink"></div>
 
-                    <div class="hidden md:flex flex-col gap-3 pb-2">
-                        <a id="modalExternalLink" href="#" target="_blank" class="w-full py-4 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-xl text-center text-sm md:text-base font-bold transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 border border-indigo-500/30">
+                    <div class="hidden md:flex flex-col gap-2.5 pb-2">
+                        <div id="modalShortLinkBtnContainer" class="hidden">
+                            <a id="modalShortLinkBtn" href="#" target="_blank" class="w-full py-3.5 bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500 text-white rounded-xl text-center text-sm md:text-base font-bold transition-all shadow-lg shadow-cyan-600/20 flex items-center justify-center gap-2 border border-cyan-500/30">
+                                <i class="fa-solid fa-receipt text-base"></i> แจ้งโอนสลิป
+                            </a>
+                        </div>
+                        <a id="modalExternalLink" href="#" target="_blank" class="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-xl text-center text-sm md:text-base font-bold transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 border border-indigo-500/30">
                             <i class="fa-solid fa-up-right-from-square text-base"></i> เปิดดูไฟล์เต็มผ่าน Google Drive
                         </a>
                     </div>
@@ -308,7 +322,7 @@
         let currentPage = 1;
         let currentModalBook = null;
 
-        // Custom High-Quality SVG Book Cover Generator when original image fails (Guarantees local rendering!)
+        // Custom High-Quality SVG Book Cover Generator when original image fails
         function getSVGPlaceholder(title, bookId) {
             const shortTitle = title ? title.substring(0, 30) + (title.length > 30 ? '...' : '') : 'No Title';
             const cleanId = bookId || 'ENG-BOOK';
@@ -317,7 +331,7 @@
 
         // Dedicated Safe Handler for Image Loading Failures
         function handleImgLoadError(imgElement, bookTitle, bookId) {
-            imgElement.onerror = null; // Decouple listener immediately to prevent any loops
+            imgElement.onerror = null;
             imgElement.src = getSVGPlaceholder(bookTitle, bookId);
         }
 
@@ -343,8 +357,6 @@
             if (!idText) return;
             
             let successful = false;
-            
-            // Standard Clipboard API (Modern secure contexts)
             try {
                 if (navigator.clipboard && navigator.clipboard.writeText) {
                     await navigator.clipboard.writeText(idText);
@@ -354,7 +366,6 @@
                 console.warn("Modern Clipboard API failed, attempting standard fallback:", err);
             }
 
-            // Fallback Legacy Method (For restricted iframe/sandboxes)
             if (!successful) {
                 try {
                     const tempInput = document.createElement('input');
@@ -377,14 +388,51 @@
             }
         }
 
+        async function copyShortLinkToClipboard(isMobile = false) {
+            if (!currentModalBook || !currentModalBook.shortLink) return;
+            const linkText = currentModalBook.shortLink;
+            const toastId = isMobile ? 'copyShortToastMobile' : 'copyShortToast';
+            
+            let successful = false;
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    await navigator.clipboard.writeText(linkText);
+                    successful = true;
+                }
+            } catch (err) {
+                console.warn("Clipboard API error:", err);
+            }
+
+            if (!successful) {
+                try {
+                    const tempInput = document.createElement('input');
+                    tempInput.value = linkText;
+                    document.body.appendChild(tempInput);
+                    tempInput.select();
+                    successful = document.execCommand('copy');
+                    document.body.removeChild(tempInput);
+                } catch (err) {
+                    console.error("Fallback copy error:", err);
+                }
+            }
+
+            if (successful) {
+                const toast = document.getElementById(toastId);
+                toast.classList.remove('hidden');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 2000);
+            }
+        }
+
         async function fetchBooks() {
-            const sheetUrl = 'https://docs.google.com/spreadsheets/d/1Bm9MmQO72oAFjMkGtIKP3gJL2xOGNJz75LtAdFkyP6o/gviz/tq?tqx=out:json';
+            // Specified sheet URL targeting sheet gid=305915762
+            const sheetUrl = 'https://docs.google.com/spreadsheets/d/1Bm9MmQO72oAFjMkGtIKP3gJL2xOGNJz75LtAdFkyP6o/gviz/tq?tqx=out:json&gid=305915762';
             const skeleton = document.getElementById('skeletonLoader');
             const errorState = document.getElementById('errorState');
             const grid = document.getElementById('booksGrid');
             const emptyState = document.getElementById('emptyState');
             
-            // Clear past UI States before reloading
             errorState.classList.add('hidden');
             grid.classList.add('hidden');
             emptyState.classList.add('hidden');
@@ -413,7 +461,7 @@
                 }
                 
                 const colIndexMap = {
-                    id: -1, title: -1, author: -1, isbn: -1, dept: -1, stock: -1, priceGen: -1, priceStd: -1, cover: -1, sample: -1, year: -1
+                    id: -1, title: -1, author: -1, isbn: -1, dept: -1, stock: -1, priceGen: -1, priceStd: -1, cover: -1, sample: -1, year: -1, shortLink: -1
                 };
                 
                 headers.forEach((h, i) => {
@@ -430,8 +478,10 @@
                     else if (h.includes('ตัวอย่างปก') || h.includes('ปก') || h.includes('cover')) colIndexMap.cover = i;
                     else if (h.includes('ตัวอย่างหนังสือ') || h.includes('ตัวอย่าง') || h.includes('sample')) colIndexMap.sample = i;
                     else if (h.includes('ปีการศึกษา') || h.includes('ปีพิมพ์') || h.includes('ปีที่พิมพ์') || h.includes('ปี') || h.includes('year')) colIndexMap.year = i;
+                    else if (h.includes('shot link') || h.includes('short link') || h.includes('shortlink') || h.includes('shotlink') || h.includes('ลิงก์ย่อ') || h.includes('ย่อลิงก์') || h.includes('short')) colIndexMap.shortLink = i;
                 });
                 
+                // Defaults fallback index matching
                 if (colIndexMap.id === -1) colIndexMap.id = 1; 
                 if (colIndexMap.title === -1) colIndexMap.title = 2; 
                 if (colIndexMap.author === -1) colIndexMap.author = 3; 
@@ -467,6 +517,19 @@
                     const stock = parseInt(getCellVal(colIndexMap.stock)) || 0;
                     const yearVal = getCellVal(colIndexMap.year) || '';
                     
+                    // Extract Short Link value
+                    let shortLink = colIndexMap.shortLink !== -1 ? getCellVal(colIndexMap.shortLink) : '';
+                    if (!shortLink) {
+                        // Intelligent inspection fallback across row cells for short links if header match was missing
+                        for (let c = 0; c < cells.length; c++) {
+                            const val = getCellVal(c);
+                            if (val && (val.includes('bit.ly') || val.includes('cutt.ly') || val.includes('gg.gg') || val.includes('tinyurl') || val.includes('goo.gl') || val.includes('t.co') || val.includes('short') || val.includes('shot'))) {
+                                shortLink = val;
+                                break;
+                            }
+                        }
+                    }
+
                     const parsePrice = (val) => {
                         if (!val) return 0;
                         const cleaned = val.replace(/,/g, '');
@@ -482,7 +545,7 @@
                     departments.add(dept);
                     
                     allBooks.push({
-                        id: cleanId, title, author, isbn, dept, stock, priceGen, priceStd, coverUrl, sampleUrl, year: yearVal
+                        id: cleanId, title, author, isbn, dept, stock, priceGen, priceStd, coverUrl, sampleUrl, year: yearVal, shortLink
                     });
                 }
                 
@@ -498,7 +561,6 @@
                 filteredBooks = [...allBooks];
                 renderCatalog();
                 
-                // Hide specific elements inside iframe blocks elegantly
                 try {
                     if (window.parent && window.parent.document) {
                         const targetSelectors = ['[aria-label="Information"]', '[aria-label="ข้อมูลเพิ่มเติม"]', '.kd-button', '.google-sites-info-icon'];
@@ -521,38 +583,29 @@
             }
         }
 
-        // Fully Responsive Direct Image Link Extractor (Detects both URL structures of Drive)
         function getDriveDirectLink(url) {
             if (!url) return '';
-            
-            // Format 1: /d/DRIVE_ID/view...
             let driveIdMatch = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
             if (driveIdMatch && driveIdMatch[1]) {
                 return `https://lh3.googleusercontent.com/d/${driveIdMatch[1]}`;
             }
-            
-            // Format 2: ?id=DRIVE_ID or &id=DRIVE_ID
             driveIdMatch = url.match(/[?&]id=([a-zA-Z0-9-_]+)/);
             if (driveIdMatch && driveIdMatch[1]) {
                 return `https://lh3.googleusercontent.com/d/${driveIdMatch[1]}`;
             }
-            
             return url;
         }
 
         function getDrivePreviewLink(url) {
             if (!url) return '#';
-            
             let driveIdMatch = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
             if (driveIdMatch && driveIdMatch[1]) {
                 return `https://drive.google.com/file/d/${driveIdMatch[1]}/view?usp=drivesdk`;
             }
-            
             driveIdMatch = url.match(/[?&]id=([a-zA-Z0-9-_]+)/);
             if (driveIdMatch && driveIdMatch[1]) {
                 return `https://drive.google.com/file/d/${driveIdMatch[1]}/view?usp=drivesdk`;
             }
-            
             return url;
         }
 
@@ -601,7 +654,8 @@
                     (book.id && book.id.toLowerCase().includes(query)) ||
                     (book.title && book.title.toLowerCase().includes(query)) ||
                     (book.author && book.author.toLowerCase().includes(query)) ||
-                    (book.isbn && book.isbn.toLowerCase().includes(query))
+                    (book.isbn && book.isbn.toLowerCase().includes(query)) ||
+                    (book.shortLink && book.shortLink.toLowerCase().includes(query))
                 );
                 const matchesDept = (selectedDept === 'all' || book.dept === selectedDept);
                 return matchesSearch && matchesDept;
@@ -762,7 +816,6 @@
             const modalTitle = document.getElementById('modalTitle');
             modalTitle.textContent = book.title;
             
-            // Reapply font sizing safely to avoid clashing Tailwind utilities
             modalTitle.className = "font-black text-white leading-tight";
             if (book.title.length > 70) {
                 modalTitle.classList.add("text-lg", "sm:text-xl", "md:text-2xl");
@@ -783,6 +836,26 @@
             } else {
                 stockEl.textContent = "สินค้าหมดชั่วคราว";
                 stockEl.className = "text-rose-400 font-bold";
+            }
+
+            // Transfer Link / Slip Logic (Show only if shortLink exists AND stock > 0)
+            const modalShortLinkBtnContainer = document.getElementById('modalShortLinkBtnContainer');
+            const modalShortLinkBtn = document.getElementById('modalShortLinkBtn');
+
+            const modalShortLinkContainerMobile = document.getElementById('modalShortLinkContainerMobile');
+            const modalShortLinkBtnMobile = document.getElementById('modalShortLinkBtnMobile');
+
+            if (book.shortLink && book.stock > 0) {
+                const formattedLink = book.shortLink.startsWith('http') ? book.shortLink : `https://${book.shortLink}`;
+
+                modalShortLinkBtn.href = formattedLink;
+                modalShortLinkBtnContainer.classList.remove('hidden');
+
+                modalShortLinkBtnMobile.href = formattedLink;
+                modalShortLinkContainerMobile.classList.remove('hidden');
+            } else {
+                modalShortLinkBtnContainer.classList.add('hidden');
+                modalShortLinkContainerMobile.classList.add('hidden');
             }
             
             const viewerContainer = document.getElementById('modalViewerContainer');
@@ -853,7 +926,6 @@
             modal.classList.add('flex');
             document.body.classList.add('overflow-hidden');
             
-            // Premium microtask animation loop
             requestAnimationFrame(() => {
                 overlay.classList.remove('opacity-0');
                 overlay.classList.add('opacity-100');
