@@ -89,7 +89,6 @@
 </head>
 <body class="bg-space-950 text-slate-100 font-sans min-h-full flex flex-col selection:bg-indigo-500/30 selection:text-indigo-200 antialiased overflow-x-hidden">
 
-    <!-- Header Banner -->
     <header class="relative overflow-hidden border-b border-space-800 bg-space-900/60 z-10">
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[150px] bg-gradient-to-r from-neon-cyan/20 to-neon-violet/20 blur-[120px] rounded-full pointer-events-none"></div>
         
@@ -111,7 +110,6 @@
         </div>
     </header>
 
-    <!-- Control Panel (Search and Filter) -->
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-8 relative">
         <section class="mb-8 max-w-4xl mx-auto">
             <div class="flex flex-col md:flex-row gap-4 items-stretch md:items-center w-full">
@@ -144,7 +142,6 @@
             </div>
         </section>
 
-        <!-- Books Catalog Grid Area -->
         <section class="relative">
             <!-- Skeleton Loader -->
             <div id="skeletonLoader" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -214,21 +211,17 @@
                     <!-- Loaded dynamically via javascript -->
                 </div>
                 
-                <!-- Mobile-Only Button Block -->
+                <!-- Mobile-Only Button Block (Removed copy short link row) -->
                 <div class="w-full mt-5 pb-6 md:hidden flex flex-col gap-3">
                     <a id="modalExternalLinkMobile" href="#" target="_blank" class="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-xl text-center text-sm font-bold transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 border border-indigo-500/30">
                         <i class="fa-solid fa-up-right-from-square text-base"></i> เปิดดูไฟล์เต็มผ่าน Google Drive
                     </a>
 
-                    <!-- Mobile Transfer Slip / Short Link Button -->
+                    <!-- Mobile Transfer Slip Button Only -->
                     <div id="modalShortLinkContainerMobile" class="w-full flex flex-col gap-2 hidden">
                         <a id="modalShortLinkBtnMobile" href="#" target="_blank" class="w-full py-3.5 bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500 text-white rounded-xl text-center text-sm font-bold transition-all shadow-lg shadow-cyan-600/20 flex items-center justify-center gap-2 border border-cyan-500/30">
                             <i class="fa-solid fa-receipt text-base"></i> แจ้งโอนสลิป
                         </a>
-                        <button onclick="copyShortLinkToClipboard(true)" class="w-full py-2.5 bg-space-900 border border-cyan-500/30 hover:border-cyan-500/50 text-cyan-300 rounded-xl text-xs font-semibold flex items-center justify-center gap-2">
-                            <i class="fa-regular fa-copy"></i> คัดลอกลิงก์โอนสลิป
-                            <span id="copyShortToastMobile" class="hidden text-[10px] text-emerald-400 font-bold bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md animate-pulse">คัดลอกแล้ว!</span>
-                        </button>
                     </div>
                     
                     <!-- Mobile-Only Large Interactive Click-to-Copy Book ID Badge -->
@@ -379,43 +372,6 @@
                 }
             }
             
-            if (successful) {
-                const toast = document.getElementById(toastId);
-                toast.classList.remove('hidden');
-                setTimeout(() => {
-                    toast.classList.add('hidden');
-                }, 2000);
-            }
-        }
-
-        async function copyShortLinkToClipboard(isMobile = false) {
-            if (!currentModalBook || !currentModalBook.shortLink) return;
-            const linkText = currentModalBook.shortLink;
-            const toastId = isMobile ? 'copyShortToastMobile' : 'copyShortToast';
-            
-            let successful = false;
-            try {
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    await navigator.clipboard.writeText(linkText);
-                    successful = true;
-                }
-            } catch (err) {
-                console.warn("Clipboard API error:", err);
-            }
-
-            if (!successful) {
-                try {
-                    const tempInput = document.createElement('input');
-                    tempInput.value = linkText;
-                    document.body.appendChild(tempInput);
-                    tempInput.select();
-                    successful = document.execCommand('copy');
-                    document.body.removeChild(tempInput);
-                } catch (err) {
-                    console.error("Fallback copy error:", err);
-                }
-            }
-
             if (successful) {
                 const toast = document.getElementById(toastId);
                 toast.classList.remove('hidden');
