@@ -211,10 +211,10 @@
                     <!-- Loaded dynamically via javascript -->
                 </div>
                 
-                <!-- Mobile-Only Button Block (Removed copy short link row) -->
+                <!-- Mobile-Only Button Block -->
                 <div class="w-full mt-5 pb-6 md:hidden flex flex-col gap-3">
                     <a id="modalExternalLinkMobile" href="#" target="_blank" class="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-xl text-center text-sm font-bold transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 border border-indigo-500/30">
-                        <i class="fa-solid fa-up-right-from-square text-base"></i> เปิดดูไฟล์เต็มผ่าน Google Drive
+                        <i class="fa-solid fa-up-right-from-square text-base"></i> ดูตัวอย่างหนังสือ ผ่าน Google Drive
                     </a>
 
                     <!-- Mobile Transfer Slip Button Only -->
@@ -293,7 +293,7 @@
                             </a>
                         </div>
                         <a id="modalExternalLink" href="#" target="_blank" class="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-xl text-center text-sm md:text-base font-bold transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 border border-indigo-500/30">
-                            <i class="fa-solid fa-up-right-from-square text-base"></i> เปิดดูไฟล์เต็มผ่าน Google Drive
+                            <i class="fa-solid fa-up-right-from-square text-base"></i> ดูตัวอย่างหนังสือ ผ่าน Google Drive
                         </a>
                     </div>
                 </div>
@@ -315,14 +315,12 @@
         let currentPage = 1;
         let currentModalBook = null;
 
-        // Custom High-Quality SVG Book Cover Generator when original image fails
         function getSVGPlaceholder(title, bookId) {
             const shortTitle = title ? title.substring(0, 30) + (title.length > 30 ? '...' : '') : 'No Title';
             const cleanId = bookId || 'ENG-BOOK';
             return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="424" viewBox="0 0 300 424"><rect width="100%" height="100%" fill="%230d1222"/><rect x="10" y="10" width="280" height="404" rx="10" fill="none" stroke="%231f294d" stroke-width="2"/><circle cx="150" cy="160" r="45" fill="%23151c33" stroke="%234f46e5" stroke-width="2"/><path d="M135,150 L165,150 M135,160 L165,160 M135,170 L155,170" stroke="%2306b6d4" stroke-width="3" stroke-linecap="round"/><text x="150" y="250" fill="%2394a3b8" font-family="Sarabun, sans-serif" font-weight="bold" font-size="14" text-anchor="middle">${encodeURIComponent(shortTitle)}</text><text x="150" y="280" fill="%234f46e5" font-family="monospace" font-weight="900" font-size="16" text-anchor="middle">${encodeURIComponent(cleanId)}</text></svg>`;
         }
 
-        // Dedicated Safe Handler for Image Loading Failures
         function handleImgLoadError(imgElement, bookTitle, bookId) {
             imgElement.onerror = null;
             imgElement.src = getSVGPlaceholder(bookTitle, bookId);
@@ -382,7 +380,6 @@
         }
 
         async function fetchBooks() {
-            // Specified sheet URL targeting sheet gid=305915762
             const sheetUrl = 'https://docs.google.com/spreadsheets/d/1Bm9MmQO72oAFjMkGtIKP3gJL2xOGNJz75LtAdFkyP6o/gviz/tq?tqx=out:json&gid=305915762';
             const skeleton = document.getElementById('skeletonLoader');
             const errorState = document.getElementById('errorState');
@@ -473,10 +470,8 @@
                     const stock = parseInt(getCellVal(colIndexMap.stock)) || 0;
                     const yearVal = getCellVal(colIndexMap.year) || '';
                     
-                    // Extract Short Link value
                     let shortLink = colIndexMap.shortLink !== -1 ? getCellVal(colIndexMap.shortLink) : '';
                     if (!shortLink) {
-                        // Intelligent inspection fallback across row cells for short links if header match was missing
                         for (let c = 0; c < cells.length; c++) {
                             const val = getCellVal(c);
                             if (val && (val.includes('bit.ly') || val.includes('cutt.ly') || val.includes('gg.gg') || val.includes('tinyurl') || val.includes('goo.gl') || val.includes('t.co') || val.includes('short') || val.includes('shot'))) {
@@ -794,7 +789,7 @@
                 stockEl.className = "text-rose-400 font-bold";
             }
 
-            // Transfer Link / Slip Logic (Show only if shortLink exists AND stock > 0)
+            // Transfer Link / Slip Logic
             const modalShortLinkBtnContainer = document.getElementById('modalShortLinkBtnContainer');
             const modalShortLinkBtn = document.getElementById('modalShortLinkBtn');
 
