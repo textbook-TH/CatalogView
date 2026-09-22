@@ -40,32 +40,33 @@
             box-shadow: 0 20px 30px -10px rgba(230, 81, 0, 0.15), 0 10px 15px -5px rgba(0, 0, 0, 0.04);
         }
         .glass-modal {
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(8px);
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(6px);
         }
     </style>
 </head>
 <body class="text-slate-800 flex flex-col min-h-screen">
 
     <!-- Header / Navbar -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-30 shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('store')">
-                <div class="w-10 h-10 bg-kmitl text-white rounded-xl flex items-center justify-center font-bold text-xl shadow-md shadow-orange-200">
+                <div class="w-10 h-10 bg-kmitl text-white rounded-xl flex items-center justify-center font-bold text-xl shadow-md shadow-orange-950">
                     <i class="fa-solid fa-book-open"></i>
                 </div>
                 <div>
-                    <span class="text-lg font-bold text-slate-900 tracking-tight block leading-tight">CatalogView</span>
-                    <span class="text-xs text-slate-500">คลังตำราเรียนและหนังสือออนไลน์</span>
+                    <span class="text-lg font-bold text-white tracking-tight block leading-tight">CatalogView</span>
+                    <span class="text-xs text-slate-400">คลังตำราเรียนและหนังสือออนไลน์</span>
                 </div>
             </div>
 
-            <nav class="flex items-center space-x-2">
-                <button id="btnNavStore" onclick="switchView('store')" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-kmitl text-white">
-                    <i class="fa-solid fa-store mr-1.5"></i> หน้าร้าน
+            <!-- เมนูแบบแคปซูลทรงมน (rounded-full) -->
+            <nav class="flex items-center space-x-2 bg-slate-950/60 p-1.5 rounded-full border border-slate-800">
+                <button id="btnNavStore" onclick="switchView('store')" class="px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 bg-[#EF5A24] text-white shadow-md flex items-center">
+                    <i class="fa-solid fa-store mr-2 text-base"></i> หน้าร้าน
                 </button>
-                <button id="btnNavAdmin" onclick="switchView('admin')" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors text-slate-600 hover:bg-slate-100">
-                    <i class="fa-solid fa-user-shield mr-1.5"></i> หน้าเจ้าหน้าที่
+                <button id="btnNavAdmin" onclick="switchView('admin')" class="px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-800/80 flex items-center">
+                    <i class="fa-solid fa-user-shield mr-2 text-base"></i> หน้าเจ้าหน้าที่
                 </button>
             </nav>
         </div>
@@ -78,22 +79,56 @@
         <section id="viewStore" class="space-y-6">
             <!-- Banner / Search Bar -->
             <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white rounded-2xl p-6 sm:p-8 shadow-lg relative overflow-hidden">
-                <div class="relative z-10 max-w-2xl">
+                <div class="relative z-10 w-full">
                     <span class="inline-block px-3 py-1 bg-orange-500/20 text-orange-400 text-xs font-semibold rounded-full mb-3 border border-orange-500/30">
                         <i class="fa-solid fa-graduation-cap mr-1"></i> ตำราเรียน สจล.
                     </span>
                     <h1 class="text-2xl sm:text-3xl font-bold mb-2">สืบค้นตำราเรียนและตรวจสอบราคาขาย</h1>
                     <p class="text-slate-300 text-sm mb-6">ค้นหารายการตำราเรียน อัปเดตราคาสำหรับนักศึกษาและบุคคลทั่วไป พร้อมอ่านตัวอย่างเล่มจริง</p>
                     
-                    <div class="relative">
-                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" id="storeSearchInput" oninput="handleSearch()" placeholder="ค้นหาตามรหัสหนังสือ (เช่น Text-001), ชื่อหนังสือ, ผู้แต่ง..." 
-                               class="w-full pl-11 pr-4 py-3 rounded-xl bg-white text-slate-800 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-kmitl shadow-inner">
+                    <!-- Search Controls: ช่องค้นหายาวขยายกว้าง (flex-1) + ดรอปดาวน์ชิดขวา (shrink-0) -->
+                    <div class="flex flex-col lg:flex-row items-center gap-3 w-full">
+                        
+                        <!-- ช่องค้นหาขยายเต็มพื้นที่ (ยืดขยายยาวขึ้น) -->
+                        <div class="relative flex-1 w-full">
+                            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <input type="text" id="storeSearchInput" oninput="handleSearch()" placeholder="ค้นหาตามรหัสหนังสือ (เช่น Text-001), ชื่อหนังสือ, ผู้แต่ง..." 
+                                   class="w-full pl-11 pr-4 py-3 rounded-2xl bg-white text-slate-800 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-kmitl shadow-inner">
+                        </div>
+
+                        <!-- กลุ่มดรอปดาวน์ อยู่แถวเดียวกัน และถูกดันไปชิดขวามือ -->
+                        <div class="flex items-center gap-3 w-full lg:w-auto shrink-0 justify-end">
+                            <!-- ดรอปดาวน์ ทุกปี -->
+                            <div class="relative w-1/2 lg:w-36">
+                                <select id="filterYear" onchange="handleSearch()" class="w-full appearance-none bg-white text-slate-700 font-medium text-xs sm:text-sm pl-4 pr-8 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-kmitl cursor-pointer shadow-sm">
+                                    <option value="">📅 ทุกปี</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2023">2023</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
+                            </div>
+
+                            <!-- ดรอปดาวน์ ทุกภาควิชา -->
+                            <div class="relative w-1/2 lg:w-48">
+                                <select id="filterDept" onchange="handleSearch()" class="w-full appearance-none bg-white text-slate-700 font-medium text-xs sm:text-sm pl-4 pr-8 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-kmitl cursor-pointer shadow-sm">
+                                    <option value="">🏢 ทุกภาควิชา</option>
+                                    <option value="วิศวกรรมไฟฟ้า">วิศวกรรมไฟฟ้า</option>
+                                    <option value="วิศวกรรมคอมพิวเตอร์">วิศวกรรมคอมพิวเตอร์</option>
+                                    <option value="วิศวกรรมเครื่องกล">วิศวกรรมเครื่องกล</option>
+                                    <option value="วิศวกรรมเคมี">วิศวกรรมเคมี</option>
+                                    <option value="วิศวกรรมโยธา">วิศวกรรมโยธา</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
 
-            <!-- Book Shelf Grid (4 cols x 3 rows = 12 items) -->
+            <!-- Book Shelf Grid -->
             <div class="flex items-center justify-between pt-2">
                 <h2 class="text-lg font-bold text-slate-800 flex items-center">
                     <i class="fa-solid fa-book text-kmitl mr-2"></i> ชั้นหนังสือทั้งหมด
@@ -130,7 +165,7 @@
         <!-- ================= 2. ADMIN VIEW (หน้าเจ้าหน้าที่) ================= -->
         <section id="viewAdmin" class="hidden space-y-6">
             
-            <!-- Auth Screen (ถ้ายังไม่ได้ล็อกอิน) -->
+            <!-- Auth Screen -->
             <div id="adminAuthBox" class="max-w-md mx-auto bg-white p-8 rounded-2xl border border-slate-200 shadow-sm mt-8">
                 <div class="text-center mb-6">
                     <div class="w-12 h-12 bg-orange-100 text-kmitl rounded-xl flex items-center justify-center mx-auto mb-3 text-xl">
@@ -165,7 +200,7 @@
                 </form>
             </div>
 
-            <!-- Dashboard Screen (เมื่อล็อกอินแล้ว) -->
+            <!-- Dashboard Screen -->
             <div id="adminDashboard" class="hidden space-y-6">
                 <!-- Top Bar -->
                 <div class="bg-white p-4 rounded-xl border border-slate-200 flex flex-wrap items-center justify-between gap-4">
@@ -218,7 +253,7 @@
                     </div>
                 </div>
 
-                <!-- Tab 2: Add/Edit Form -->
+                <!-- Tab 2: Add/Edit Form (ห้ามแก้ไขเปลี่ยนเเปลง 100%) -->
                 <div id="secAdminAdd" class="hidden max-w-2xl bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
                     <div>
                         <h3 class="text-base font-bold text-slate-800">จัดการข้อมูลและไฟล์แนบหนังสือ</h3>
@@ -292,82 +327,92 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-white border-t border-slate-200 py-6 mt-auto text-center text-xs text-slate-500">
+    <footer class="bg-slate-900 border-t border-slate-800 py-6 mt-auto text-center text-xs text-slate-400">
         <p>© CatalogView - ระบบสืบค้นและแสดงราคาขายตำราเรียน สจล.</p>
     </footer>
 
     <!-- ================= BOOK DETAIL POPUP MODAL ================= -->
-    <div id="bookModal" class="fixed inset-0 z-50 glass-modal flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl border border-slate-100 transform transition-all relative max-h-[90vh] flex flex-col">
+    <div id="bookModal" class="fixed inset-0 z-50 glass-modal flex items-center justify-center p-3 sm:p-6 overflow-y-auto hidden">
+        <div class="bg-white rounded-[1.75rem] max-w-[700px] w-full p-5 sm:p-7 shadow-2xl relative my-auto">
             
-            <!-- Close Button -->
-            <button onclick="closeBookModal()" class="absolute top-4 right-4 z-10 w-8 h-8 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full flex items-center justify-center transition">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
+            <!-- Header Modal ("รายละเอียดหนังสือ/ตำราเรียน") -->
+            <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+                <h3 class="text-base sm:text-lg font-bold text-slate-900 tracking-tight">รายละเอียดหนังสือ/ตำราเรียน</h3>
+                <button onclick="closeBookModal()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
 
-            <div class="p-6 overflow-y-auto space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
-                    <!-- Left: Book Cover Image -->
-                    <div class="md:col-span-2 flex flex-col items-center">
-                        <div class="w-full aspect-[3/4] bg-slate-100 rounded-xl overflow-hidden shadow-md border border-slate-200 relative">
-                            <img id="modalCoverImg" src="" alt="Cover" class="w-full h-full object-cover">
-                        </div>
-                        <span id="modalBookCode" class="mt-3 px-3 py-1 bg-slate-100 text-slate-700 text-xs font-mono font-bold rounded-md">
-                            -
-                        </span>
-                    </div>
-
-                    <!-- Right: Book Details -->
-                    <div class="md:col-span-3 space-y-4 flex flex-col justify-between">
-                        <div class="space-y-2">
-                            <div class="flex items-center space-x-2">
-                                <span id="modalEdition" class="px-2 py-0.5 bg-orange-100 text-kmitl text-[11px] font-semibold rounded">
-                                    -
-                                </span>
-                                <span id="modalDept" class="text-xs text-slate-500">
-                                    -
-                                </span>
-                            </div>
-                            <h2 id="modalTitle" class="text-xl font-bold text-slate-900 leading-snug">
-                                -
-                            </h2>
-                            <p id="modalAuthor" class="text-xs text-slate-600">
-                                -
-                            </p>
-                        </div>
-
-                        <div class="space-y-2 pt-2 border-t border-slate-100 text-xs">
-                            <div class="flex justify-between py-1 border-b border-slate-50">
-                                <span class="text-slate-400">ISBN:</span>
-                                <span id="modalIsbn" class="font-mono font-medium text-slate-700">-</span>
-                            </div>
-                            <div class="flex justify-between py-1 border-b border-slate-50">
-                                <span class="text-slate-400">จำนวนหน้า:</span>
-                                <span id="modalPages" class="font-medium text-slate-700">- หน้า</span>
-                            </div>
-                        </div>
-
-                        <!-- Price Box -->
-                        <div class="bg-orange-50/70 p-3.5 rounded-xl border border-orange-100 space-y-2">
-                            <div class="flex items-center justify-between">
-                                <span class="text-xs font-semibold text-slate-700">ราคานักศึกษา / บุคลากร</span>
-                                <span id="modalStudentPrice" class="text-lg font-bold text-kmitl">฿0</span>
-                            </div>
-                            <div class="flex items-center justify-between text-xs text-slate-500">
-                                <span>ราคาบุคคลทั่วไป (ราคาปก)</span>
-                                <span id="modalPublicPrice" class="font-semibold text-slate-700">฿0</span>
-                            </div>
-                        </div>
-
-                        <!-- Action Button: View Preview PDF (Exclusive in Modal) -->
-                        <div class="pt-2">
-                            <button id="btnModalPreview" onclick="openPdfPreview()" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl flex items-center justify-center transition shadow-sm">
-                                <i class="fa-solid fa-file-pdf mr-2 text-red-400 text-sm"></i> อ่านตัวอย่างหนังสือ (PDF)
-                            </button>
+            <!-- Body Grid: Responsive 1/2 Column -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-6 items-stretch">
+                
+                <!-- ฝั่งซ้าย: รูปปกหนังสือ -->
+                <div class="md:col-span-5 bg-slate-100 rounded-2xl overflow-hidden flex items-center justify-center border border-slate-200">
+                    <div class="w-full h-full min-h-[280px] sm:min-h-[320px] relative flex items-center justify-center">
+                        <img id="modalCoverImg" src="" alt="Cover" class="w-full h-full object-cover rounded-2xl hidden">
+                        <div id="modalNoCoverText" class="text-slate-400 text-xs text-center p-4">
+                            <i class="fa-solid fa-image text-4xl mb-2 block opacity-60"></i>
+                            ไม่มีรูปภาพปก
                         </div>
                     </div>
                 </div>
+
+                <!-- ฝั่งขวา: รายละเอียดข้อมูลตารางพร้อมเส้นไขปลา + ปุ่ม PDF + แถบราคา -->
+                <div class="md:col-span-7 flex flex-col justify-between space-y-3 py-0.5 text-xs sm:text-sm">
+                    
+                    <div class="space-y-2">
+                        <div class="grid grid-cols-12 items-center border-b border-dashed border-slate-200 pb-2">
+                            <span class="col-span-5 sm:col-span-4 text-slate-500 font-normal">รหัสหนังสือ</span>
+                            <span id="modalBookCode" class="col-span-7 sm:col-span-8 text-slate-800 font-semibold font-mono">Text-004</span>
+                        </div>
+                        <div class="grid grid-cols-12 items-baseline border-b border-dashed border-slate-200 pb-2">
+                            <span class="col-span-5 sm:col-span-4 text-slate-500 font-normal">ชื่อหนังสือ</span>
+                            <span id="modalTitle" class="col-span-7 sm:col-span-8 text-slate-900 font-bold leading-snug">ระบบฝังตัวและการออกแบบร่วม</span>
+                        </div>
+                        <div class="grid grid-cols-12 items-center border-b border-dashed border-slate-200 pb-2">
+                            <span class="col-span-5 sm:col-span-4 text-slate-500 font-normal">ภาควิชา</span>
+                            <span id="modalDept" class="col-span-7 sm:col-span-8 text-slate-800">วิศวกรรมไฟฟ้า</span>
+                        </div>
+                        <div class="grid grid-cols-12 items-center border-b border-dashed border-slate-200 pb-2">
+                            <span class="col-span-5 sm:col-span-4 text-slate-500 font-normal">ปีที่พิมพ์</span>
+                            <span id="modalYear" class="col-span-7 sm:col-span-8 text-slate-800">2026</span>
+                        </div>
+                        <div class="grid grid-cols-12 items-center border-b border-dashed border-slate-200 pb-2">
+                            <span class="col-span-5 sm:col-span-4 text-slate-500 font-normal">ISBN</span>
+                            <span id="modalIsbn" class="col-span-7 sm:col-span-8 text-slate-800 font-mono">978-616-338-171-2</span>
+                        </div>
+                        <div class="grid grid-cols-12 items-center border-b border-dashed border-slate-200 pb-2">
+                            <span class="col-span-5 sm:col-span-4 text-slate-500 font-normal">จำนวนหน้า</span>
+                            <span id="modalPages" class="col-span-7 sm:col-span-8 text-slate-800">347 หน้า</span>
+                        </div>
+                        <div class="grid grid-cols-12 items-center border-b border-dashed border-slate-200 pb-2">
+                            <span class="col-span-5 sm:col-span-4 text-slate-500 font-normal">พิมพ์ครั้งที่</span>
+                            <span id="modalEdition" class="col-span-7 sm:col-span-8 text-slate-800">ครั้งที่ 1</span>
+                        </div>
+                    </div>
+
+                    <!-- ปุ่มอ่านตัวอย่างหนังสือ (PDF) -->
+                    <div class="pt-1">
+                        <button id="btnModalPreview" onclick="openPdfPreview()" class="w-full py-2.5 px-4 border-2 border-[#1E88E5] text-[#1E88E5] hover:bg-blue-50 rounded-xl font-semibold text-xs sm:text-sm flex items-center justify-center transition duration-200">
+                            <i class="fa-solid fa-file-pdf mr-2 text-base"></i> <span id="txtBtnPreview">อ่านตัวอย่างหนังสือ (PDF)</span>
+                        </button>
+                    </div>
+
+                    <!-- แถบราคาแบบแยกกล่อง 2 ฝั่ง -->
+                    <div class="grid grid-cols-2 gap-3 pt-1">
+                        <div class="bg-slate-50 rounded-xl p-2.5 flex items-center justify-between border border-slate-100">
+                            <span class="text-slate-600 font-medium text-xs">ราคาทั่วไป</span>
+                            <span id="modalPublicPrice" class="text-slate-900 font-bold text-sm sm:text-base">505 บาท</span>
+                        </div>
+                        <div class="bg-[#FFF8F0] rounded-xl p-2.5 flex items-center justify-between border border-orange-100">
+                            <span class="text-[#EF5A24] font-medium text-xs">ราคานักศึกษา</span>
+                            <span id="modalStudentPrice" class="text-[#EF5A24] font-bold text-sm sm:text-base">290 บาท</span>
+                        </div>
+                    </div>
+
+                </div>
             </div>
+
         </div>
     </div>
 
@@ -382,7 +427,7 @@
         let allBooks = [];
         let filteredBooks = [];
         let currentPage = 1;
-        const ITEMS_PER_PAGE = 12; // 4 cols x 3 rows
+        const ITEMS_PER_PAGE = 12;
         let selectedBookForModal = null;
         let adminUser = null;
 
@@ -392,7 +437,7 @@
             checkExistingSession();
         });
 
-        // Check if already logged in Supabase
+        // Check Session
         async function checkExistingSession() {
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (session && session.user) {
@@ -403,7 +448,7 @@
             }
         }
 
-        // ------------------ GOOGLE DRIVE HELPER ------------------
+        // Helper Drive Url
         function formatGoogleDriveUrl(url) {
             if (!url) return '';
             const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
@@ -424,7 +469,7 @@
             return url;
         }
 
-        // ------------------ FILTER LATEST EDITION HELPER ------------------
+        // Filter Latest Edition
         function getLatestEditionsOnly(booksList) {
             const latestMap = new Map();
 
@@ -449,7 +494,7 @@
             return Array.from(latestMap.values());
         }
 
-        // ------------------ DATA FETCHING ------------------
+        // Fetch Books from Supabase
         async function fetchBooksFromSupabase() {
             try {
                 showStoreLoading(true);
@@ -470,21 +515,29 @@
             }
         }
 
-        // ------------------ STOREVIEW LOGIC ------------------
+        // Store Filtering
         function applyStoreFilter() {
             const searchKeyword = document.getElementById('storeSearchInput').value.trim().toLowerCase();
+            const selectedYear = document.getElementById('filterYear').value;
+            const selectedDept = document.getElementById('filterDept').value;
             
-            // คัดกรองให้เหลือเฉพาะฉบับพิมพ์ล่าสุดของแต่ละ book_code ก่อนนำไปค้นหา/แสดงผล
             const latestBooks = getLatestEditionsOnly(allBooks);
 
             filteredBooks = latestBooks.filter(book => {
                 const hasCover = book.cover_image_url && book.cover_image_url.trim() !== '';
+                
                 const matchesSearch = 
                     (book.book_code && book.book_code.toLowerCase().includes(searchKeyword)) ||
                     (book.title && book.title.toLowerCase().includes(searchKeyword)) ||
                     (book.author && book.author.toLowerCase().includes(searchKeyword));
+
+                const bookYear = String(book.publish_year || book.year || '');
+                const matchesYear = !selectedYear || bookYear === selectedYear;
+
+                const bookDept = book.department || book.dept_name || '';
+                const matchesDept = !selectedDept || bookDept.includes(selectedDept);
                 
-                return hasCover && matchesSearch;
+                return hasCover && matchesSearch && matchesYear && matchesDept;
             });
 
             currentPage = 1;
@@ -519,9 +572,10 @@
                 const coverSrc = formatGoogleDriveUrl(book.cover_image_url) || 'https://via.placeholder.com/300x400?text=No+Cover';
                 const studentPrice = book.actual_student_price ? `฿${Number(book.actual_student_price).toLocaleString()}` : '-';
                 const publicPrice = book.actual_public_price ? `฿${Number(book.actual_public_price).toLocaleString()}` : '-';
+                const deptDisplay = book.department || book.dept_name || 'วิศวกรรมไฟฟ้า';
 
                 return `
-                    <div onclick="openBookModal(${book.id})" class="bg-white rounded-2xl p-4 border border-slate-100 book-card-shadow cursor-pointer transition-all duration-300 flex flex-col justify-between group">
+                    <div onclick="openBookModal('${book.id}')" class="bg-white rounded-2xl p-4 border border-slate-100 book-card-shadow cursor-pointer transition-all duration-300 flex flex-col justify-between group">
                         <div class="space-y-3">
                             <div class="aspect-[3/4] bg-slate-100 rounded-xl overflow-hidden relative shadow-inner">
                                 <img src="${coverSrc}" alt="${book.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://via.placeholder.com/300x400?text=Cover+Error'">
@@ -531,7 +585,7 @@
                             </div>
 
                             <div>
-                                <span class="text-[10px] text-slate-400 block">${book.department || 'สาขาวิชาทั่วไป'}</span>
+                                <span class="text-[10px] text-slate-400 block">${deptDisplay}</span>
                                 <h3 class="text-xs font-bold text-slate-800 line-clamp-2 mt-0.5 group-hover:text-kmitl transition-colors">
                                     ${book.title || 'ไม่ระบุชื่อเรื่อง'}
                                 </h3>
@@ -590,33 +644,52 @@
             document.getElementById('storeLoading').classList.toggle('hidden', !isLoading);
         }
 
-        // ------------------ POPUP MODAL LOGIC ------------------
+        // Modal Logic
         function openBookModal(bookId) {
-            const book = allBooks.find(b => b.id === bookId);
-            if (!book) return;
+            try {
+                const book = allBooks.find(b => String(b.id) === String(bookId));
+                if (!book) return;
 
-            selectedBookForModal = book;
+                selectedBookForModal = book;
 
-            document.getElementById('modalCoverImg').src = formatGoogleDriveUrl(book.cover_image_url) || 'https://via.placeholder.com/300x400?text=No+Cover';
-            document.getElementById('modalBookCode').textContent = book.book_code || '-';
-            document.getElementById('modalEdition').textContent = `พิมพ์ครั้งที่ ${book.edition || 1}`;
-            document.getElementById('modalDept').textContent = book.department || 'ไม่ระบุสาขา';
-            document.getElementById('modalTitle').textContent = book.title || 'ไม่ระบุชื่อเรื่อง';
-            document.getElementById('modalAuthor').textContent = `ผู้แต่ง: ${book.author || '-'}`;
-            document.getElementById('modalIsbn').textContent = book.isbn || '-';
-            document.getElementById('modalPages').textContent = book.pages ? `${book.pages} หน้า` : '-';
-            
-            document.getElementById('modalStudentPrice').textContent = book.actual_student_price ? `฿${Number(book.actual_student_price).toLocaleString()}` : '-';
-            document.getElementById('modalPublicPrice').textContent = book.actual_public_price ? `฿${Number(book.actual_public_price).toLocaleString()}` : '-';
+                const coverImg = document.getElementById('modalCoverImg');
+                const noCoverText = document.getElementById('modalNoCoverText');
+                if (book.cover_image_url && book.cover_image_url.trim() !== '') {
+                    coverImg.src = formatGoogleDriveUrl(book.cover_image_url);
+                    coverImg.classList.remove('hidden');
+                    noCoverText.classList.add('hidden');
+                } else {
+                    coverImg.classList.add('hidden');
+                    noCoverText.classList.remove('hidden');
+                }
 
-            const btnPreview = document.getElementById('btnModalPreview');
-            if (book.file_url && book.file_url.trim() !== '') {
-                btnPreview.classList.remove('hidden');
-            } else {
-                btnPreview.classList.add('hidden');
+                document.getElementById('modalBookCode').textContent = book.book_code || '-';
+                document.getElementById('modalTitle').textContent = book.title || 'ไม่ระบุชื่อเรื่อง';
+                document.getElementById('modalDept').textContent = book.department || book.dept_name || 'วิศวกรรมไฟฟ้า';
+                document.getElementById('modalYear').textContent = book.publish_year || book.year || new Date().getFullYear();
+                document.getElementById('modalIsbn').textContent = book.isbn || '-';
+                document.getElementById('modalPages').textContent = book.pages ? `${book.pages} หน้า` : '-';
+                document.getElementById('modalEdition').textContent = `ครั้งที่ ${book.edition || 1}`;
+                
+                document.getElementById('modalPublicPrice').textContent = book.actual_public_price ? `${Number(book.actual_public_price).toLocaleString()} บาท` : '-';
+                document.getElementById('modalStudentPrice').textContent = book.actual_student_price ? `${Number(book.actual_student_price).toLocaleString()} บาท` : '-';
+
+                const txtBtnPreview = document.getElementById('txtBtnPreview');
+                const btnPreview = document.getElementById('btnModalPreview');
+                if (book.file_url && book.file_url.trim() !== '') {
+                    txtBtnPreview.textContent = 'อ่านตัวอย่างหนังสือ (PDF)';
+                    btnPreview.disabled = false;
+                    btnPreview.classList.remove('opacity-50', 'cursor-not-allowed');
+                } else {
+                    txtBtnPreview.textContent = 'ไม่มีไฟล์ตัวอย่าง';
+                    btnPreview.disabled = true;
+                    btnPreview.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+
+                document.getElementById('bookModal').classList.remove('hidden');
+            } catch (err) {
+                console.error('Error opening book modal:', err);
             }
-
-            document.getElementById('bookModal').classList.remove('hidden');
         }
 
         function closeBookModal() {
@@ -631,13 +704,12 @@
             }
         }
 
-        // ------------------ ADMIN LOGIN LOGIC (EMAIL + PASSWORD) ------------------
+        // Admin Auth
         async function handleAdminLogin(e) {
             e.preventDefault();
             const email = document.getElementById('inputAdminEmail').value.trim();
             const password = document.getElementById('inputAdminPassword').value;
 
-            // 1. Check Domain restriction
             if (!email.toLowerCase().endsWith('@kmitl.ac.th')) {
                 alert('สิทธิ์การเข้าถึงปฏิเสธ: ต้องใช้อีเมลสถาบัน @kmitl.ac.th เท่านั้น');
                 return;
@@ -648,19 +720,16 @@
             btnSubmit.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin mr-1.5"></i> กำลังตรวจสอบ...`;
 
             try {
-                // Try Supabase Auth Sign In first
                 const { data, error } = await supabaseClient.auth.signInWithPassword({
                     email: email,
                     password: password
                 });
 
                 if (error) {
-                    // Fallback Mode: ถ้ายังไม่ได้สร้าง User ใน Supabase Auth ให้ล็อกอินสำเร็จถ้าใช้รหัสผ่านสำหรับเจ้าหน้าที่
-                    // (สามารถตั้งค่ารหัสผ่านสำรองตรงนี้ได้ เช่น "123456" หรือ "admin123")
                     if (password === 'admin123' || password === '123456') {
                         loginSuccess(email);
                     } else {
-                        alert('อีเมลหรือรหัสผ่านไม่ถูกต้อง (หากใช้งานครั้งแรก ลองใช้รหัสผ่าน admin123 หรือตรวจสอบบัญชีใน Supabase)');
+                        alert('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
                     }
                 } else {
                     loginSuccess(data.user.email);
@@ -710,8 +779,6 @@
 
         function renderAdminTable() {
             const tbody = document.getElementById('tblAdminBooks');
-            
-            // แสดงผลเฉพาะพิมพ์ครั้งล่าสุดในตารางจัดการของเจ้าหน้าที่ด้วยเช่นกัน
             const latestAdminBooks = getLatestEditionsOnly(allBooks);
 
             tbody.innerHTML = latestAdminBooks.map(b => {
@@ -732,7 +799,7 @@
                         </td>
                         <td class="px-4 py-3 text-center space-x-2">
                             <button onclick="fillFormForEdit('${b.book_code}', ${b.edition})" class="text-kmitl hover:underline font-semibold">แก้ไข</button>
-                            <button onclick="deleteBook(${b.id})" class="text-red-500 hover:underline">ลบ</button>
+                            <button onclick="deleteBook('${b.id}')" class="text-red-500 hover:underline">ลบ</button>
                         </td>
                     </tr>
                 `;
@@ -840,7 +907,7 @@
             }
         }
 
-        // ------------------ VIEW NAVIGATION ------------------
+        // View Navigation
         function switchView(view) {
             const vStore = document.getElementById('viewStore');
             const vAdmin = document.getElementById('viewAdmin');
@@ -850,13 +917,13 @@
             if (view === 'store') {
                 vStore.classList.remove('hidden');
                 vAdmin.classList.add('hidden');
-                btnStore.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-kmitl text-white';
-                btnAdmin.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-colors text-slate-600 hover:bg-slate-100';
+                btnStore.className = 'px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 bg-[#EF5A24] text-white shadow-md flex items-center';
+                btnAdmin.className = 'px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-800/80 flex items-center';
             } else {
                 vStore.classList.add('hidden');
                 vAdmin.classList.remove('hidden');
-                btnAdmin.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-kmitl text-white';
-                btnStore.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-colors text-slate-600 hover:bg-slate-100';
+                btnAdmin.className = 'px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 bg-[#EF5A24] text-white shadow-md flex items-center';
+                btnStore.className = 'px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-800/80 flex items-center';
             }
         }
     </script>
