@@ -98,27 +98,18 @@
 
                         <!-- กลุ่มดรอปดาวน์ อยู่แถวเดียวกัน และถูกดันไปชิดขวามือ -->
                         <div class="flex items-center gap-3 w-full lg:w-auto shrink-0 justify-end">
-                            <!-- ดรอปดาวน์ ทุกปี -->
+                            <!-- ดรอปดาวน์ ทุกปี (สร้างตัวเลือกแบบ Dynamic จาก calc_date/publish_year) -->
                             <div class="relative w-1/2 lg:w-36">
                                 <select id="filterYear" onchange="handleSearch()" class="w-full appearance-none bg-white text-slate-700 font-medium text-xs sm:text-sm pl-4 pr-8 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-kmitl cursor-pointer shadow-sm">
                                     <option value="">📅 ทุกปี</option>
-                                    <option value="2026">2026</option>
-                                    <option value="2025">2025</option>
-                                    <option value="2024">2024</option>
-                                    <option value="2023">2023</option>
                                 </select>
                                 <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
                             </div>
 
-                            <!-- ดรอปดาวน์ ทุกภาควิชา -->
+                            <!-- ดรอปดาวน์ ทุกภาควิชา (สร้างตัวเลือกแบบ Dynamic จาก department) -->
                             <div class="relative w-1/2 lg:w-48">
                                 <select id="filterDept" onchange="handleSearch()" class="w-full appearance-none bg-white text-slate-700 font-medium text-xs sm:text-sm pl-4 pr-8 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-kmitl cursor-pointer shadow-sm">
                                     <option value="">🏢 ทุกภาควิชา</option>
-                                    <option value="วิศวกรรมไฟฟ้า">วิศวกรรมไฟฟ้า</option>
-                                    <option value="วิศวกรรมคอมพิวเตอร์">วิศวกรรมคอมพิวเตอร์</option>
-                                    <option value="วิศวกรรมเครื่องกล">วิศวกรรมเครื่องกล</option>
-                                    <option value="วิศวกรรมเคมี">วิศวกรรมเคมี</option>
-                                    <option value="วิศวกรรมโยธา">วิศวกรรมโยธา</option>
                                 </select>
                                 <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
                             </div>
@@ -431,6 +422,57 @@
         let selectedBookForModal = null;
         let adminUser = null;
 
+        // Helper: Extract 4-digit Year from calc_date / publish_year / year / date
+        function getBookYear(book) {
+            const raw = book.calc_date || book.publish_year || book.year || book.created_at || '';
+            if (!raw) return '';
+            const match = String(raw).match(/\d{4}/);
+            return match ? match[0] : String(raw).trim();
+        }
+
+        // Helper: Get Department consistently
+        function getBookDept(book) {
+            return (book.department || book.dept_name || book.dept || '').trim();
+        }
+
+        // Populate Dropdowns dynamically from Database
+        function populateFilterDropdowns(booksList) {
+            const selectYear = document.getElementById('filterYear');
+            const selectDept = document.getElementById('filterDept');
+
+            // ดึงเฉพาะเล่มพิมพ์ครั้งล่าสุดมาวิเคราะห์ตัวเลือก
+            const latestBooks = getLatestEditionsOnly(booksList);
+
+            // เก็บรายการปีที่ค้นพบ (ไม่ซ้ำ)
+            const yearsSet = new Set();
+            // เก็บรายการภาควิชาที่ค้นพบ (ไม่ซ้ำ)
+            const deptsSet = new Set();
+
+            latestBooks.forEach(book => {
+                const yr = getBookYear(book);
+                if (yr) yearsSet.add(yr);
+
+                const dept = getBookDept(book);
+                if (dept) deptsSet.add(dept);
+            });
+
+            // 1. สร้าง Option สำหรับ ดร็อปดาวน์ ปี (เรียงจากปีล่าสุดไปปีเก่า)
+            const sortedYears = Array.from(yearsSet).sort((a, b) => b.localeCompare(a));
+            let yearOptionsHTML = '<option value="">📅 ทุกปี</option>';
+            sortedYears.forEach(yr => {
+                yearOptionsHTML += `<option value="${yr}">${yr}</option>`;
+            });
+            selectYear.innerHTML = yearOptionsHTML;
+
+            // 2. สร้าง Option สำหรับ ดร็อปดาวน์ ภาควิชา (เรียงตามตัวอักษร)
+            const sortedDepts = Array.from(deptsSet).sort((a, b) => a.localeCompare(b, 'th'));
+            let deptOptionsHTML = '<option value="">🏢 ทุกภาควิชา</option>';
+            sortedDepts.forEach(dept => {
+                deptOptionsHTML += `<option value="${dept}">${dept}</option>`;
+            });
+            selectDept.innerHTML = deptOptionsHTML;
+        }
+
         // Init App
         document.addEventListener('DOMContentLoaded', () => {
             fetchBooksFromSupabase();
@@ -469,7 +511,7 @@
             return url;
         }
 
-        // Filter Latest Edition
+        // Filter Latest Edition Only (ดึงเฉพาะพิมพ์ครั้งที่สูงสุดของแต่ละ book_code)
         function getLatestEditionsOnly(booksList) {
             const latestMap = new Map();
 
@@ -506,6 +548,8 @@
                 if (error) throw error;
 
                 allBooks = data || [];
+                // อัปเดตรายการดร็อปดาวน์ ปี และ ภาควิชา แบบ Dynamic
+                populateFilterDropdowns(allBooks);
                 applyStoreFilter();
                 renderAdminTable();
             } catch (err) {
@@ -515,27 +559,31 @@
             }
         }
 
-        // Store Filtering
+        // Store Filtering (รองรับการกรองตามคำค้นหา, ปี calc_date, และภาควิชา department)
         function applyStoreFilter() {
             const searchKeyword = document.getElementById('storeSearchInput').value.trim().toLowerCase();
             const selectedYear = document.getElementById('filterYear').value;
             const selectedDept = document.getElementById('filterDept').value;
             
+            // กรองเฉพาะเล่มพิมพ์ครั้งล่าสุดของแต่ละ book_code
             const latestBooks = getLatestEditionsOnly(allBooks);
 
             filteredBooks = latestBooks.filter(book => {
                 const hasCover = book.cover_image_url && book.cover_image_url.trim() !== '';
                 
                 const matchesSearch = 
+                    !searchKeyword ||
                     (book.book_code && book.book_code.toLowerCase().includes(searchKeyword)) ||
                     (book.title && book.title.toLowerCase().includes(searchKeyword)) ||
                     (book.author && book.author.toLowerCase().includes(searchKeyword));
 
-                const bookYear = String(book.publish_year || book.year || '');
+                // ดึงปี ค.ศ. จาก calc_date / publish_year / year
+                const bookYear = getBookYear(book);
                 const matchesYear = !selectedYear || bookYear === selectedYear;
 
-                const bookDept = book.department || book.dept_name || '';
-                const matchesDept = !selectedDept || bookDept.includes(selectedDept);
+                // ดึงภาควิชาจาก department / dept_name
+                const bookDept = getBookDept(book);
+                const matchesDept = !selectedDept || bookDept.toLowerCase().includes(selectedDept.toLowerCase());
                 
                 return hasCover && matchesSearch && matchesYear && matchesDept;
             });
@@ -572,7 +620,7 @@
                 const coverSrc = formatGoogleDriveUrl(book.cover_image_url) || 'https://via.placeholder.com/300x400?text=No+Cover';
                 const studentPrice = book.actual_student_price ? `฿${Number(book.actual_student_price).toLocaleString()}` : '-';
                 const publicPrice = book.actual_public_price ? `฿${Number(book.actual_public_price).toLocaleString()}` : '-';
-                const deptDisplay = book.department || book.dept_name || 'วิศวกรรมไฟฟ้า';
+                const deptDisplay = getBookDept(book) || 'ไม่ระบุภาควิชา';
 
                 return `
                     <div onclick="openBookModal('${book.id}')" class="bg-white rounded-2xl p-4 border border-slate-100 book-card-shadow cursor-pointer transition-all duration-300 flex flex-col justify-between group">
@@ -665,8 +713,8 @@
 
                 document.getElementById('modalBookCode').textContent = book.book_code || '-';
                 document.getElementById('modalTitle').textContent = book.title || 'ไม่ระบุชื่อเรื่อง';
-                document.getElementById('modalDept').textContent = book.department || book.dept_name || 'วิศวกรรมไฟฟ้า';
-                document.getElementById('modalYear').textContent = book.publish_year || book.year || new Date().getFullYear();
+                document.getElementById('modalDept').textContent = getBookDept(book) || 'ไม่ระบุภาควิชา';
+                document.getElementById('modalYear').textContent = getBookYear(book) || '-';
                 document.getElementById('modalIsbn').textContent = book.isbn || '-';
                 document.getElementById('modalPages').textContent = book.pages ? `${book.pages} หน้า` : '-';
                 document.getElementById('modalEdition').textContent = `ครั้งที่ ${book.edition || 1}`;
