@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CatalogView - คลังตำราเรียนและหนังสือออนไลน์</title>
+    
+    <!-- Security: Strict Content Security Policy (CSP) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' https: data: blob: https://lh3.googleusercontent.com https://raw.githubusercontent.com; frame-src 'self' https://drive.google.com; connect-src 'self' https://iaqtzbkjpbwrwwgabnzy.supabase.co;">
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
@@ -102,7 +106,7 @@
                     <div class="flex flex-col lg:flex-row items-center gap-3 w-full mt-3 sm:mt-0">
                         <div class="relative flex-1 w-full">
                             <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs sm:text-sm"></i>
-                            <input type="text" id="storeSearchInput" oninput="handleSearch()" autocomplete="off" placeholder="ค้นหาตามรหัสหนังสือ, ชื่อหนังสือ, ผู้แต่ง..." 
+                            <input type="text" id="storeSearchInput" oninput="handleSearch()" autocomplete="off" maxlength="100" placeholder="ค้นหาตามรหัสหนังสือ, ชื่อหนังสือ, ผู้แต่ง..." 
                                    class="w-full pl-10 sm:pl-11 pr-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-white text-slate-800 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-kmitl shadow-inner">
                         </div>
 
@@ -175,7 +179,7 @@
                         <label class="block text-xs font-semibold text-slate-700 mb-1">อีเมลองค์กร</label>
                         <div class="relative">
                             <i class="fa-solid fa-envelope absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                            <input type="email" id="inputAdminEmail" required autocomplete="off" placeholder="example@kmitl.ac.th" 
+                            <input type="email" id="inputAdminEmail" required autocomplete="username" maxlength="100" placeholder="example@kmitl.ac.th" 
                                    class="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-kmitl">
                         </div>
                     </div>
@@ -184,7 +188,7 @@
                         <label class="block text-xs font-semibold text-slate-700 mb-1">รหัสผ่าน (Password)</label>
                         <div class="relative">
                             <i class="fa-solid fa-key absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                            <input type="password" id="inputAdminPassword" required autocomplete="new-password" placeholder="••••••••" 
+                            <input type="password" id="inputAdminPassword" required autocomplete="current-password" maxlength="100" placeholder="••••••••" 
                                    class="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-kmitl">
                         </div>
                     </div>
@@ -263,7 +267,7 @@
                         <div class="bg-slate-50 p-3.5 sm:p-4 rounded-xl border border-slate-200">
                             <label class="block text-xs font-semibold text-slate-700 mb-1.5">รหัสหนังสือ</label>
                             <div class="flex items-center gap-2">
-                                <input type="text" id="formBookCode" required autocomplete="off" placeholder="เช่น Text-001 หรือ TEXT-024" 
+                                <input type="text" id="formBookCode" required autocomplete="off" maxlength="50" placeholder="เช่น Text-001 หรือ TEXT-024" 
                                        class="flex-1 px-3.5 py-2 rounded-lg border border-slate-300 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-kmitl">
                                 <button type="button" onclick="fetchExistingBookData()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-medium rounded-lg transition shrink-0 flex items-center">
                                     <i class="fa-solid fa-magnifying-glass mr-1.5"></i> ดึงข้อมูล
@@ -293,7 +297,7 @@
                                 <label class="block text-xs font-semibold text-slate-700 mb-1">
                                     <i class="fa-brands fa-google-drive text-emerald-600 mr-1"></i> กรอกลิงก์ URL จาก Google Drive
                                 </label>
-                                <input type="url" id="formCoverUrl" autocomplete="off" placeholder="กรอกลิงก์ URL จาก Google Drive" 
+                                <input type="url" id="formCoverUrl" autocomplete="off" maxlength="500" placeholder="กรอกลิงก์ URL จาก Google Drive" 
                                        class="w-full px-3 py-2.5 rounded-lg border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-kmitl">
                                 <p class="text-[10px] text-slate-400 mt-1">* ลิงก์ไฟล์รูปภาพ (.jpg, .png) สำหรับทำปกหนังสือ</p>
                             </div>
@@ -302,7 +306,7 @@
                                 <label class="block text-xs font-semibold text-slate-700 mb-1">
                                     <i class="fa-brands fa-google-drive text-blue-600 mr-1"></i> กรอกลิงก์ URL จาก Google Drive
                                 </label>
-                                <input type="url" id="formFileUrl" autocomplete="off" placeholder="กรอกลิงก์ URL จาก Google Drive" 
+                                <input type="url" id="formFileUrl" autocomplete="off" maxlength="500" placeholder="กรอกลิงก์ URL จาก Google Drive" 
                                        class="w-full px-3 py-2.5 rounded-lg border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-kmitl">
                                 <p class="text-[10px] text-slate-400 mt-1">* ลิงก์ไฟล์ PDF สำหรับปุ่มอ่านตัวอย่างหนังสือ</p>
                             </div>
@@ -424,6 +428,27 @@
         let selectedBookForModal = null;
         let adminUser = null;
         let matchedBookRecord = null;
+
+        // Security Utility: Prevent XSS Attacks & HTML Injection
+        function sanitizeHTML(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // Safe URL Formatter to prevent javascript: pseudo-protocol attacks
+        function safeUrl(url) {
+            if (!url) return '';
+            const trimmed = String(url).trim();
+            if (trimmed.toLowerCase().startsWith('javascript:') || trimmed.toLowerCase().startsWith('data:')) {
+                return 'about:blank';
+            }
+            return sanitizeHTML(trimmed);
+        }
         
         function getHiddenBookIds() {
             try {
@@ -474,14 +499,14 @@
             const sortedYears = Array.from(yearsSet).sort((a, b) => b.localeCompare(a));
             let yearOptionsHTML = '<option value="">📅 ทุกปี</option>';
             sortedYears.forEach(yr => {
-                yearOptionsHTML += `<option value="${yr}">${yr}</option>`;
+                yearOptionsHTML += `<option value="${sanitizeHTML(yr)}">${sanitizeHTML(yr)}</option>`;
             });
             selectYear.innerHTML = yearOptionsHTML;
 
             const sortedDepts = Array.from(deptsSet).sort((a, b) => a.localeCompare(b, 'th'));
             let deptOptionsHTML = '<option value="">🏢 ทุกภาควิชา</option>';
             sortedDepts.forEach(dept => {
-                deptOptionsHTML += `<option value="${dept}">${dept}</option>`;
+                deptOptionsHTML += `<option value="${sanitizeHTML(dept)}">${sanitizeHTML(dept)}</option>`;
             });
             selectDept.innerHTML = deptOptionsHTML;
         }
@@ -508,7 +533,7 @@
                 const fileId = match[1];
                 return `https://lh3.googleusercontent.com/d/${fileId}`;
             }
-            return url;
+            return safeUrl(url);
         }
 
         function formatGoogleDriveEmbedUrl(url) {
@@ -518,7 +543,7 @@
                 const fileId = match[1];
                 return `https://drive.google.com/file/d/${fileId}/preview`;
             }
-            return url;
+            return safeUrl(url);
         }
 
         function getLatestEditionsOnly(booksList) {
@@ -624,24 +649,24 @@
                 const coverSrc = formatGoogleDriveUrl(book.cover_image_url) || 'https://via.placeholder.com/300x400?text=No+Cover';
                 const studentPrice = book.actual_student_price ? `฿${Number(book.actual_student_price).toLocaleString()}` : '-';
                 const publicPrice = book.actual_public_price ? `฿${Number(book.actual_public_price).toLocaleString()}` : '-';
-                const deptDisplay = getBookDept(book) || 'ไม่ระบุภาควิชา';
+                const deptDisplay = sanitizeHTML(getBookDept(book) || 'ไม่ระบุภาควิชา');
 
                 return `
-                    <div onclick="openBookModal('${book.id}')" class="bg-white rounded-2xl p-4 border border-slate-100 book-card-shadow cursor-pointer transition-all duration-300 flex flex-col justify-between group">
+                    <div onclick="openBookModal('${sanitizeHTML(book.id)}')" class="bg-white rounded-2xl p-4 border border-slate-100 book-card-shadow cursor-pointer transition-all duration-300 flex flex-col justify-between group">
                         <div class="space-y-3">
                             <div class="aspect-[3/4] bg-slate-100 rounded-xl overflow-hidden relative shadow-inner">
-                                <img src="${coverSrc}" alt="${book.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://via.placeholder.com/300x400?text=Cover+Error'">
+                                <img src="${coverSrc}" alt="${sanitizeHTML(book.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://via.placeholder.com/300x400?text=Cover+Error'">
                                 <span class="absolute top-2 left-2 px-2 py-0.5 bg-slate-900/80 backdrop-blur-sm text-white text-[10px] font-mono rounded">
-                                    ${book.book_code || '-'}
+                                    ${sanitizeHTML(book.book_code) || '-'}
                                 </span>
                             </div>
 
                             <div>
                                 <span class="text-[10px] text-slate-400 block">${deptDisplay}</span>
                                 <h3 class="text-xs font-bold text-slate-800 line-clamp-2 mt-0.5 group-hover:text-kmitl transition-colors">
-                                    ${book.title || 'ไม่ระบุชื่อเรื่อง'}
+                                    ${sanitizeHTML(book.title) || 'ไม่ระบุชื่อเรื่อง'}
                                 </h3>
-                                <p class="text-[11px] text-slate-500 mt-1 truncate">${book.author || 'ไม่ระบุผู้แต่ง'}</p>
+                                <p class="text-[11px] text-slate-500 mt-1 truncate">${sanitizeHTML(book.author) || 'ไม่ระบุผู้แต่ง'}</p>
                             </div>
                         </div>
 
@@ -751,7 +776,9 @@
         function openPdfPreview() {
             if (selectedBookForModal && selectedBookForModal.file_url) {
                 const previewUrl = formatGoogleDriveEmbedUrl(selectedBookForModal.file_url);
-                window.open(previewUrl, '_blank');
+                if (previewUrl && previewUrl !== 'about:blank') {
+                    window.open(previewUrl, '_blank', 'noopener,noreferrer');
+                }
             }
         }
 
@@ -770,18 +797,15 @@
             btnSubmit.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin mr-1.5"></i> กำลังตรวจสอบ...`;
 
             try {
+                // Secure Auth Process: Strictly enforce Auth Verification via Supabase Backend
                 const { data, error } = await supabaseClient.auth.signInWithPassword({
                     email: email,
                     password: password
                 });
 
                 if (error) {
-                    if (password === 'admin123' || password === '123456') {
-                        loginSuccess(email);
-                    } else {
-                        alert('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
-                    }
-                } else {
+                    alert('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
+                } else if (data && data.user) {
                     loginSuccess(data.user.email);
                 }
             } catch (err) {
@@ -795,7 +819,7 @@
 
         function loginSuccess(email) {
             adminUser = email;
-            document.getElementById('txtAdminUserEmail').textContent = email;
+            document.getElementById('txtAdminUserEmail').textContent = sanitizeHTML(email);
             document.getElementById('adminAuthBox').classList.add('hidden');
             document.getElementById('adminDashboard').classList.remove('hidden');
             document.getElementById('btnNavLogout').classList.remove('hidden');
@@ -850,15 +874,15 @@
                         <div class="flex items-start justify-between">
                             <div>
                                 <span class="px-2 py-0.5 bg-slate-100 text-slate-800 text-[10px] font-mono font-bold rounded">
-                                    ${b.book_code || '-'}
+                                    ${sanitizeHTML(b.book_code) || '-'}
                                 </span>
-                                <span class="ml-1.5 text-[10px] text-slate-400">พิมพ์ครั้งที่ ${b.edition || 1}</span>
+                                <span class="ml-1.5 text-[10px] text-slate-400">พิมพ์ครั้งที่ ${sanitizeHTML(b.edition) || 1}</span>
                             </div>
                         </div>
 
                         <div>
-                            <h4 class="text-xs font-bold text-slate-800 leading-snug">${b.title || '-'}</h4>
-                            <p class="text-[11px] text-slate-500 mt-0.5"><i class="fa-regular fa-user mr-1 text-[10px]"></i>${b.author || '-'}</p>
+                            <h4 class="text-xs font-bold text-slate-800 leading-snug">${sanitizeHTML(b.title) || '-'}</h4>
+                            <p class="text-[11px] text-slate-500 mt-0.5"><i class="fa-regular fa-user mr-1 text-[10px]"></i>${sanitizeHTML(b.author) || '-'}</p>
                         </div>
 
                         <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
@@ -868,10 +892,10 @@
                                 <span class="text-slate-400 text-[11px] font-normal ml-1">/ ฿${b.actual_public_price ? Number(b.actual_public_price).toLocaleString() : '-'}</span>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <button onclick="fillFormForEdit('${b.book_code}')" title="แก้ไข" class="w-8 h-8 rounded-lg bg-orange-50 text-kmitl hover:bg-orange-100 flex items-center justify-center text-xs transition">
+                                <button onclick="fillFormForEdit('${sanitizeHTML(b.book_code)}')" title="แก้ไข" class="w-8 h-8 rounded-lg bg-orange-50 text-kmitl hover:bg-orange-100 flex items-center justify-center text-xs transition">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </button>
-                                <button onclick="deleteBook('${b.id}')" title="ซ่อน/ลบ" class="w-8 h-8 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center text-xs transition">
+                                <button onclick="deleteBook('${sanitizeHTML(b.id)}')" title="ซ่อน/ลบ" class="w-8 h-8 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center text-xs transition">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </button>
                             </div>
@@ -886,11 +910,11 @@
                 const hasFile = b.file_url && b.file_url.trim() !== '';
 
                 return `
-                    <tr class="hover:bg-slate-50 transition" id="row-book-${b.id}">
-                        <td class="px-4 py-3 font-mono font-bold text-slate-800">${b.book_code || '-'}</td>
-                        <td class="px-4 py-3 text-center">${b.edition || 1}</td>
-                        <td class="px-4 py-3 font-medium text-slate-800 max-w-xs truncate">${b.title || '-'}</td>
-                        <td class="px-4 py-3 text-slate-500">${b.author || '-'}</td>
+                    <tr class="hover:bg-slate-50 transition" id="row-book-${sanitizeHTML(b.id)}">
+                        <td class="px-4 py-3 font-mono font-bold text-slate-800">${sanitizeHTML(b.book_code) || '-'}</td>
+                        <td class="px-4 py-3 text-center">${sanitizeHTML(b.edition) || 1}</td>
+                        <td class="px-4 py-3 font-medium text-slate-800 max-w-xs truncate">${sanitizeHTML(b.title) || '-'}</td>
+                        <td class="px-4 py-3 text-slate-500">${sanitizeHTML(b.author) || '-'}</td>
                         <td class="px-4 py-3 text-right font-semibold text-emerald-600">฿${b.actual_student_price ? Number(b.actual_student_price).toLocaleString() : '-'}</td>
                         <td class="px-4 py-3 text-right text-slate-600">฿${b.actual_public_price ? Number(b.actual_public_price).toLocaleString() : '-'}</td>
                         <td class="px-4 py-3 text-center hidden sm:table-cell">
@@ -905,10 +929,10 @@
                         </td>
                         <td class="px-4 py-3 text-center">
                             <div class="flex items-center justify-center space-x-2">
-                                <button onclick="fillFormForEdit('${b.book_code}')" title="จัดการข้อมูล" class="w-7 h-7 rounded bg-slate-100 hover:bg-orange-100 text-slate-600 hover:text-kmitl transition flex items-center justify-center">
+                                <button onclick="fillFormForEdit('${sanitizeHTML(b.book_code)}')" title="จัดการข้อมูล" class="w-7 h-7 rounded bg-slate-100 hover:bg-orange-100 text-slate-600 hover:text-kmitl transition flex items-center justify-center">
                                     <i class="fa-solid fa-pen-to-square text-xs"></i>
                                 </button>
-                                <button onclick="deleteBook('${b.id}')" title="ซ่อนรายการนี้" class="w-7 h-7 rounded bg-slate-100 hover:bg-red-100 text-slate-600 hover:text-red-500 transition flex items-center justify-center">
+                                <button onclick="deleteBook('${sanitizeHTML(b.id)}')" title="ซ่อนรายการนี้" class="w-7 h-7 rounded bg-slate-100 hover:bg-red-100 text-slate-600 hover:text-red-500 transition flex items-center justify-center">
                                     <i class="fa-solid fa-trash-can text-xs"></i>
                                 </button>
                             </div>
