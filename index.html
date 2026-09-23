@@ -84,7 +84,7 @@
                         <i class="fa-solid fa-graduation-cap mr-1"></i> ตำราเรียน สจล.
                     </span>
                     <h1 class="text-2xl sm:text-3xl font-bold mb-2">สืบค้นตำราเรียนและตรวจสอบราคาขาย</h1>
-                    <p class="text-slate-300 text-sm mb-6">ค้นหารายการตำราเรียน อัปเดตราคาสำหรับนักศึกษาและบุคคลทั่วไป พร้อมอ่านตัวอย่างเล่มจริง</p>
+                    <p class="text-slate-300 text-sm mb-6">ค้นหารายการหนังสือ/ตำราเรียน อัปเดตราคาปัจจุบัน พร้อมอ่านตัวอย่างเล่มจริง</p>
                     
                     <!-- Search Controls -->
                     <div class="flex flex-col lg:flex-row items-center gap-3 w-full">
@@ -239,14 +239,14 @@
                 <div id="secAdminAdd" class="hidden max-w-2xl bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
                     <div>
                         <h3 class="text-base font-bold text-slate-800">จัดการข้อมูลและไฟล์แนบหนังสือ</h3>
-                        <p class="text-xs text-slate-500 mt-0.5">ระบุรหัสหนังสือเพื่อดึงรายละเอียดเล่ม และอัปเดตลิงก์ไฟล์รูปปก/ตัวอย่างหนังสือ</p>
+                        <p class="text-xs text-slate-500 mt-0.5">ระบุรหัสหนังสือ เพื่อดึงข้อมูลมาทำชั้นวางหนังสือ</p>
                     </div>
 
                     <form id="formAddBook" onsubmit="handleSaveBook(event)" class="space-y-5">
                         
                         <!-- 1. ค้นหารหัสหนังสือ -->
                         <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                            <label class="block text-xs font-semibold text-slate-700 mb-1.5">รหัสหนังสือ (book_code) *</label>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1.5">หัสหนังสือ</label>
                             <div class="flex items-center gap-2">
                                 <input type="text" id="formBookCode" required placeholder="เช่น Text-001 หรือ TEXT-024" 
                                        class="flex-1 px-3.5 py-2 rounded-lg border border-slate-300 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-kmitl">
@@ -256,10 +256,10 @@
                             </div>
                         </div>
 
-                        <!-- 2. แสดงรายละเอียดหนังสือที่ดึงมา (ดึงข้อมูล: รหัสหนังสือ, ชื่อหนังสือ, ภาควิชา, ปีที่พิมพ์, ISBN, จำนวนหน้า, พิมพ์ครั้งที่) -->
+                        <!-- 2. แสดงรายละเอียดหนังสือที่ดึงมา -->
                         <div id="boxAutoFilled" class="space-y-3 p-4 bg-orange-50/50 rounded-xl border border-orange-200/60 text-xs">
                             <div class="font-semibold text-slate-800 flex items-center border-b border-orange-200/60 pb-2">
-                                <i class="fa-solid fa-circle-info text-kmitl mr-2"></i> รายละเอียดหนังสือ / ตำราเรียน (ดึงจากระบบ)
+                                <i class="fa-solid fa-circle-info text-kmitl mr-2"></i> รายละเอียดหนังสือ / ตำราเรียน
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-600">
                                 <div><span class="text-slate-400">รหัสหนังสือ:</span> <span id="infoBookCode" class="font-semibold font-mono text-slate-800">-</span></div>
@@ -276,20 +276,20 @@
                         <div class="space-y-4 pt-1">
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 mb-1">
-                                    <i class="fa-brands fa-google-drive text-emerald-600 mr-1"></i> ลิงก์รูปภาพปกหนังสือ (cover_image_url)
+                                    <i class="fa-brands fa-google-drive text-emerald-600 mr-1"></i> ลิงก์รูปภาพปกหนังสือ
                                 </label>
                                 <input type="url" id="formCoverUrl" placeholder="https://drive.google.com/file/d/.../view?usp=sharing" 
                                        class="w-full px-3 py-2.5 rounded-lg border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-kmitl">
-                                <p class="text-[10px] text-slate-400 mt-1">* กรุณาแชร์สิทธิ์ไฟล์ใน Google Drive เป็น "ทุกคนที่มีลิงก์สามารถดูได้"</p>
+                                <p class="text-[10px] text-slate-400 mt-1">* ลิงก์ไฟล์รูปภาพ (.jpg, .png) สำหรับทำปกหนังสือ</p>
                             </div>
 
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 mb-1">
-                                    <i class="fa-brands fa-google-drive text-blue-600 mr-1"></i> ลิงก์ตัวอย่างหนังสือ (file_url)
+                                    <i class="fa-brands fa-google-drive text-blue-600 mr-1"></i> ลิงก์ตัวอย่างหนังสือ
                                 </label>
                                 <input type="url" id="formFileUrl" placeholder="https://drive.google.com/file/d/.../view?usp=sharing" 
                                        class="w-full px-3 py-2.5 rounded-lg border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-kmitl">
-                                <p class="text-[10px] text-slate-400 mt-1">* ลิงก์ไฟล์ PDF สำหรับปุ่มอ่านตัวอย่างหนังสือในหน้าหลัก</p>
+                                <p class="text-[10px] text-slate-400 mt-1">* ลิงก์ไฟล์ PDF สำหรับปุ่มอ่านตัวอย่างหนังสือ</p>
                             </div>
                         </div>
 
@@ -309,7 +309,7 @@
 
     <!-- FOOTER -->
     <footer class="bg-slate-900 border-t border-slate-800 py-6 mt-auto text-center text-xs text-slate-400">
-        <p>© CatalogView - ระบบสืบค้นและแสดงราคาขายตำราเรียน สจล.</p>
+        <p>© 2026 งานเทคโนโลยีการศึกษา คณะวิศวกรรมศาสตร์ สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง</p>
     </footer>
 
     <!-- ================= BOOK DETAIL POPUP MODAL ================= -->
