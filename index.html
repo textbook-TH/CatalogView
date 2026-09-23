@@ -51,8 +51,12 @@
     <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-30 shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('store')">
-                <div class="w-10 h-10 bg-kmitl text-white rounded-xl flex items-center justify-center font-bold text-xl shadow-md shadow-orange-950">
-                    <i class="fa-solid fa-book-open"></i>
+                <!-- Logo โชว์รูปเต็ม ไม่มีสโตรก/พื้นหลังสีขาว -->
+                <div class="w-12 h-12 flex items-center justify-center shrink-0">
+                    <img src="https://raw.githubusercontent.com/textbook-TH/CatalogView/main/logo.png" 
+                         alt="CatalogView Logo" 
+                         class="w-full h-full object-contain"
+                         onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-10 h-10 bg-kmitl text-white rounded-xl flex items-center justify-center font-bold text-xl\'><i class=\'fa-solid fa-book-open\'></i></div>';">
                 </div>
                 <div>
                     <span class="text-lg font-bold text-white tracking-tight block leading-tight">CatalogView</span>
@@ -405,7 +409,6 @@
         let adminUser = null;
         let matchedBookRecord = null;
         
-        // อ่านและจัดการ ID รายการที่กดสั่งซ่อนไว้ผ่าน localStorage เพื่อคงสถานะเมื่อกด F5
         function getHiddenBookIds() {
             try {
                 const stored = localStorage.getItem('catalogview_hidden_book_ids');
@@ -555,7 +558,6 @@
             const latestBooks = getLatestEditionsOnly(allBooks);
 
             filteredBooks = latestBooks.filter(book => {
-                // เพิ่มเงื่อนไขซ่อนหนังสือหาก ID อยู่ในรายการ hiddenBookIds
                 const isHidden = hiddenBookIds.has(String(book.id));
                 const hasCover = book.cover_image_url && book.cover_image_url.trim() !== '';
                 
@@ -813,7 +815,6 @@
             const tbody = document.getElementById('tblAdminBooks');
             const latestAdminBooks = getLatestEditionsOnly(allBooks);
 
-            // กรองรายการที่ไม่ถูกกดสั่งซ่อนมาแสดงผล
             const visibleAdminBooks = latestAdminBooks.filter(b => !hiddenBookIds.has(String(b.id)));
 
             tbody.innerHTML = visibleAdminBooks.map(b => {
@@ -841,7 +842,6 @@
             }).join('');
         }
 
-        // ดึงข้อมูลรายละเอียดหนังสือจาก Supabase
         async function fetchExistingBookData() {
             const rawCode = document.getElementById('formBookCode').value.trim();
 
@@ -860,11 +860,10 @@
                 if (error) throw error;
 
                 if (data && data.length > 0) {
-                    const found = data[0]; // เลือกฉบับล่าสุด
+                    const found = data[0];
 
                     matchedBookRecord = found;
                     
-                    // แสดงข้อมูล 7 ส่วนครบถ้วน
                     document.getElementById('infoBookCode').textContent = found.book_code || '-';
                     document.getElementById('infoTitle').textContent = found.title || '-';
                     document.getElementById('infoDept').textContent = getBookDept(found) || '-';
@@ -873,7 +872,6 @@
                     document.getElementById('infoPages').textContent = found.pages ? `${found.pages} หน้า` : '-';
                     document.getElementById('infoEdition').textContent = `ครั้งที่ ${found.edition || 1}`;
 
-                    // ใส่ค่าลิงก์ที่มีอยู่ลงใน Input
                     document.getElementById('formCoverUrl').value = found.cover_image_url || '';
                     document.getElementById('formFileUrl').value = found.file_url || '';
                 } else {
@@ -928,7 +926,6 @@
 
                 if (error) throw error;
 
-                // นำ ID ออกจาก hiddenBookIds เพื่อยกเลิกการซ่อนรายการ
                 hiddenBookIds.delete(String(matchedBookRecord.id));
                 saveHiddenBookIds(hiddenBookIds);
 
@@ -943,15 +940,12 @@
             }
         }
 
-        // Logic การลบ: ซ่อนออกจากหน้าตารางและหน้าร้าน โดยไม่มีการลบหรือแตะต้องข้อมูลใน Supabase
         function deleteBook(id) {
             if (!confirm('คุณต้องการซ่อนรายการนี้ออกจากชั้นหนังสือใช่หรือไม่?\n(ข้อมูลในฐานข้อมูล Supabase จะยังคงอยู่ครบถ้วนไม่มีการเปลี่ยนแปลง)')) return;
 
-            // เพิ่ม ID เข้าไปในรายการซ่อน และบันทึกลง localStorage
             hiddenBookIds.add(String(id));
             saveHiddenBookIds(hiddenBookIds);
             
-            // อัปเดตตารางหน้าเจ้าหน้าที่ และชั้นหนังสือหน้าร้านทันที
             renderAdminTable();
             applyStoreFilter();
         }
