@@ -511,12 +511,15 @@
             selectDept.innerHTML = deptOptionsHTML;
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             fetchBooksFromSupabase();
             clearAllForms();
-            window.addEventListener('beforeunload', () => {
-                supabaseClient.auth.signOut();
-            });
+
+            // เช็กสถานะการล็อกอินเดิมเบื้องหลัง (ไม่ต้อง signOut ทิ้งทุกครั้ง)
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (session && session.user) {
+                loginSuccess(session.user.email);
+            }
         });
 
         function clearAllForms() {
