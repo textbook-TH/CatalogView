@@ -931,16 +931,16 @@
                                 </span>
                             </div>
                         </td>
-                        <td class="px-4 py-3 text-center">
-                            <div class="flex items-center justify-center space-x-2">
-                                <button onclick="fillFormForEdit('${sanitizeHTML(b.book_code)}')" title="จัดการข้อมูล" class="w-7 h-7 rounded bg-slate-100 hover:bg-orange-100 text-slate-600 hover:text-kmitl transition flex items-center justify-center">
-                                    <i class="fa-solid fa-pen-to-square text-xs"></i>
-                                </button>
-                                <button onclick="deleteBook('${sanitizeHTML(b.id)}')" title="ซ่อนรายการนี้" class="w-7 h-7 rounded bg-slate-100 hover:bg-red-100 text-slate-600 hover:text-red-500 transition flex items-center justify-center">
-                                    <i class="fa-solid fa-trash-can text-xs"></i>
-                                </button>
-                            </div>
-                        </td>
+                        <<td class="px-4 py-3 text-center">
+    <div class="flex items-center justify-center space-x-2">
+        <button onclick="fillFormForEdit('${sanitizeHTML(b.book_code)}')" title="จัดการข้อมูล" class="w-7 h-7 rounded bg-orange-50 hover:bg-orange-100 text-orange-500 transition flex items-center justify-center">
+            <i class="fa-solid fa-pen-to-square text-xs"></i>
+        </button>
+        <button onclick="deleteBook('${sanitizeHTML(b.id)}')" title="ซ่อนรายการนี้" class="w-7 h-7 rounded bg-red-50 hover:bg-red-100 text-red-600 transition flex items-center justify-center">
+            <i class="fa-solid fa-trash-can text-xs"></i>
+        </button>
+    </div>
+</td>
                     </tr>
                 `;
             }).join('');
