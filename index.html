@@ -895,12 +895,13 @@
                                 <span class="text-slate-400 text-[11px] font-normal ml-1">/ ฿${b.actual_public_price ? Number(b.actual_public_price).toLocaleString() : '-'}</span>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <button onclick="fillFormForEdit('${sanitizeHTML(b.book_code)}')" title="แก้ไข" class="w-8 h-8 rounded-lg bg-orange-50 text-kmitl hover:bg-orange-100 flex items-center justify-center text-xs transition">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
-                                <button onclick="deleteBook('${sanitizeHTML(b.id)}')" title="ซ่อน/ลบ" class="w-8 h-8 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center text-xs transition">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </button>
+    <button onclick="fillFormForEdit('${sanitizeHTML(b.book_code)}')" title="แก้ไข" class="w-8 h-8 rounded-lg bg-orange-50 text-orange-500 hover:bg-orange-100 flex items-center justify-center text-xs transition">
+        <i class="fa-solid fa-pen-to-square"></i>
+    </button>
+    <button onclick="deleteBook('${sanitizeHTML(b.id)}')" title="ซ่อน/ลบ" class="w-8 h-8 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 flex items-center justify-center text-xs transition">
+        <i class="fa-solid fa-trash-can"></i>
+    </button>
+</div>
                             </div>
                         </div>
                     </div>
